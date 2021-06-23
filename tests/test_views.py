@@ -1,9 +1,6 @@
 import pytest
 from flask import json
-
 from flaskr import app
-
-from .utils import MockResponse
 
 
 @pytest.fixture
@@ -38,9 +35,7 @@ data = [
 
 
 def test_get_heros_success(client, mocker):
-    mocker.patch(
-        "api.hahow.requests.get", return_value=MockResponse(data=data, status_code=200)
-    )
+    mocker.patch("flaskr.get_heros", return_value={"status": "Success", "data": data})
 
     response = client.get("/heroes")
 
@@ -48,10 +43,9 @@ def test_get_heros_success(client, mocker):
     assert json.loads(response.data) == data
 
 
-def test_get_hero_by_id(client, mocker):
+def test_get_hero_by_id_success(client, mocker):
     mocker.patch(
-        "api.hahow.requests.get",
-        return_value=MockResponse(status_code=200, data=data[0]),
+        "flaskr.get_hero_by_id", return_value={"status": "Success", "data": data[0]}
     )
 
     response = client.get("/heroes/1")
@@ -60,10 +54,8 @@ def test_get_hero_by_id(client, mocker):
     assert json.loads(response.data)["id"] == "1"
 
 
-def test_get_hero_by_id_not_found(client, mocker):
-    mocker.patch(
-        "api.hahow.requests.get", return_value=MockResponse(status_code=404, data={})
-    )
+def test_get_hero_by_id_404(client, mocker):
+    mocker.patch("flaskr.get_heros", return_value={"status": "Fail", "error_code": 404})
 
     response = client.get("/heroes/5")
 
