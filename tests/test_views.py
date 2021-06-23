@@ -55,7 +55,7 @@ def test_get_hero_by_id_success(client, mocker):
 
 
 def test_get_hero_by_id_404(client, mocker):
-    mocker.patch("flaskr.get_heros", return_value={"status": "Fail", "error_code": 404})
+    mocker.patch("flaskr.get_hero_by_id", return_value={"status": "Fail", "error_code": 404})
 
     response = client.get("/heroes/5")
 
