@@ -35,3 +35,12 @@ def get_hero_by_id(hero_id):
         return Response("The Returned data is not json decodable", status=500)
 
     return Response(json.dumps(data), status=200, mimetype="application/json")
+
+
+def auth(username, password):
+    endpoint = "https://hahow-recruit.herokuapp.com/auth"
+    resp = requests.post(endpoint, json={"name": username, "password": password})
+
+    if resp.status_code != 200:
+        return False
+    return True
