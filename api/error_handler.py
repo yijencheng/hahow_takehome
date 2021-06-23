@@ -1,7 +1,5 @@
-from flask.wrappers import Response
-
-
 from flask import Response
+
 
 def err_response(status_code: int) -> Response:
     if status_code == 404:
