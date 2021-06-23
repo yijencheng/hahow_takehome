@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api, Resource
 
-from api.hahow import get_hero_by_id, get_heros
+from thirdparty.hahow import get_hero_by_id, get_heros
 
 app = Flask(__name__)
 api = Api(app)
