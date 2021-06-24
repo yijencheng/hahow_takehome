@@ -48,9 +48,19 @@ class Hero(Resource):
         if resp["status"] != "Success":
             return err_response(resp["error_code"])
 
-        return Response(
-            json.dumps(resp["data"]), status=200, mimetype="application/json"
-        )
+        data = resp["data"]
+        name, password = request.headers.get("Name"), request.headers.get("Password")
+        if not name or not password:
+            return Response(
+                response=json.dumps(data),
+                status=200,
+                mimetype="application/json",
+            )
+
+        if auth(name, password):
+            data["profile"] = get_profile_by_id(hero_id)
+
+        return Response(json.dumps(data), status=200, mimetype="application/json")
 
 
 api.add_resource(HeroList, "/heroes")

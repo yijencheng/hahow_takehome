@@ -24,7 +24,10 @@ def get_hero_by_id(hero_id):
 def get_profile_by_id(hero_id):
     endpoint = f"https://hahow-recruit.herokuapp.com/heroes/{hero_id}/profile"
     resp = requests.get(endpoint)
-    return resp.json()
+
+    if resp.status_code != 200:
+        return {"status": "Fail", "error_code": resp.status_code}
+    return {"status": "Success", "data": resp.json()}
 
 
 def auth(username, password):
