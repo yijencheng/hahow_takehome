@@ -1,9 +1,9 @@
 import json
 
-from flask import Flask, Response
+from flask import Flask, Response, request
 from flask_restful import Api, Resource
 
-from thirdparty.hahow import get_hero_by_id, get_heros
+from thirdparty.hahow import get_hero_by_id, get_heros, auth, get_profile_by_id
 
 from .error_handler import err_response
 
@@ -22,8 +22,23 @@ class HeroList(Resource):
         if resp["status"] != "Success":
             return err_response(resp["error_code"])
 
+        name, password = request.headers.get("Name"), request.headers.get("Password")
+        if not name or not password:
+            return Response(
+                response=json.dumps({"heroes": resp["data"]}),
+                status=200,
+                mimetype="application/json",
+            )
+
+        if auth(name, password):
+            data = resp["data"]  # data is just a reference to resp['data']
+            for i in range(len(data)):
+                data[i]["profile"] = get_profile_by_id(data[i]["id"])
+
         return Response(
-            json.dumps(resp["data"]), status=200, mimetype="application/json"
+            response=json.dumps({"heroes": resp["data"]}),
+            status=200,
+            mimetype="application/json",
         )
 
 

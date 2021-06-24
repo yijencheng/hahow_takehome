@@ -34,24 +34,44 @@ data = [
 ]
 
 
-def test_get_heros_success(client, mocker):
+def test_get_heros_success_without_auth(client, mocker):
     mocker.patch("flaskr.get_heros", return_value={"status": "Success", "data": data})
 
     response = client.get("/heroes")
 
-    assert response.status_code == 200
-    assert json.loads(response.data) == data
-
-
-def test_get_hero_by_id_success(client, mocker):
-    mocker.patch(
-        "flaskr.get_hero_by_id", return_value={"status": "Success", "data": data[0]}
-    )
-
-    response = client.get("/heroes/1")
+    resp_json_list = json.loads(response.data)
 
     assert response.status_code == 200
-    assert json.loads(response.data)["id"] == "1"
+    assert json.loads(response.data)["heroes"] == data
+    assert all("profile" not in x for x in resp_json_list["heroes"])
+
+
+def test_get_heros_success_with_auth(client, mocker):
+    mocker.patch("flaskr.get_heros", return_value={"status": "Success", "data": data})
+    mocker.patch("flaskr.auth", return_value=True)
+    mocker.patch("flaskr.get_profile_by_id", return_value={"key": "value"})
+
+    response = client.get("/heroes", headers={"Name": "hahow", "Password": "rocks"})
+
+    resp_json_list = json.loads(response.data)
+
+    assert response.status_code == 200
+    assert json.loads(response.data)["heroes"] == data
+    assert all("profile" in x for x in resp_json_list["heroes"])
+
+
+def test_get_heros_auth_fail(client, mocker):
+    mocker.patch("flaskr.get_heros", return_value={"status": "Success", "data": data})
+    mocker.patch("flaskr.auth", return_value=False)
+    mocker.patch("flaskr.get_profile_by_id", return_value={"key": "value"})
+
+    response = client.get("/heroes", headers={"Name": "hahow", "Password": "rockssss"})
+
+    resp_json_list = json.loads(response.data)
+
+    assert response.status_code == 200
+    assert all("profile" not in x for x in resp_json_list)
+    assert json.loads(response.data)["heroes"] == data
 
 
 def test_get_hero_by_id_404(client, mocker):
