@@ -1,10 +1,4 @@
-import json
-from json.decoder import JSONDecodeError
-
 import requests
-from flask import Response
-
-from .error_handler import err_response
 
 
 def get_heros():
@@ -12,14 +6,9 @@ def get_heros():
     resp = requests.get(endpoint)
 
     if resp.status_code != 200:
-        return err_response(resp.status_code)
+        return {"status": "Fail", "error_code": resp.status_code}
 
-    try:
-        data = resp.json()
-    except JSONDecodeError:
-        return Response("The Returned data is not json decodable", status=500)
-
-    return Response(json.dumps(data), status=200, mimetype="application/json")
+    return {"status": "Success", "data": resp.json()}
 
 
 def get_hero_by_id(hero_id):
@@ -27,11 +16,21 @@ def get_hero_by_id(hero_id):
     resp = requests.get(endpoint)
 
     if resp.status_code != 200:
-        return err_response(resp.status_code)
+        return {"status": "Fail", "error_code": resp.status_code}
 
-    try:
-        data = resp.json()
-    except JSONDecodeError:
-        return Response("The Returned data is not json decodable", status=500)
+    return {"status": "Success", "data": resp.json()}
 
-    return Response(json.dumps(data), status=200, mimetype="application/json")
+
+def get_profile_by_id(hero_id):
+    endpoint = f"https://hahow-recruit.herokuapp.com/heroes/{hero_id}/profile"
+    resp = requests.get(endpoint)
+    return resp.json()
+
+
+def auth(username, password):
+    endpoint = "https://hahow-recruit.herokuapp.com/auth"
+    resp = requests.post(endpoint, json={"name": username, "password": password})
+
+    if resp.status_code != 200:
+        return False
+    return True

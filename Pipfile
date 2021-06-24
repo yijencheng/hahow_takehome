@@ -5,6 +5,13 @@ name = "pypi"
 
 [packages]
 flask = "*"
+requests = "*"
+flask-restful = "*"
+pytest = "*"
+pytest-mock = "*"
+flake8 = "*"
+black = "*"
+isort = "*"
 
 [requires]
 python_version = "3.8"
