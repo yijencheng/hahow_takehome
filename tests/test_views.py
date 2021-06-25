@@ -37,7 +37,7 @@ def test_data():
     ]
 
 
-class TestHeroList:
+class TestHeroesList:
     def test_get_heros_success_without_auth(self, client, mocker, test_data):
         mocker.patch(
             "flaskr.get_heros",
@@ -100,14 +100,14 @@ class TestHeroList:
         )
 
         assert response.status_code == 401
-        assert response.data == b"Unauthorized client"
+
 
 
 class TestHero:
     def test_get_hero_by_id_success_without_auth(self, client, mocker, test_data):
         mocker.patch(
             "flaskr.get_hero_by_id",
-            return_value={"status": "Success", "status_code": 200, "data": test_data[0]},
+            return_value={"status": "Success", "data": test_data[0]},
         )
 
         response = client.get("/heroes/1")
@@ -120,7 +120,7 @@ class TestHero:
 
     def test_get_hero_by_id_not_found(self, client, mocker):
         mocker.patch(
-            "flaskr.get_hero_by_id", return_value={"status": "Fail", "status_code": 404, "data": {}}
+            "flaskr.get_hero_by_id", return_value={"status": "Fail", "error_code": 404}
         )
 
         response = client.get("/heroes/5")
@@ -131,10 +131,10 @@ class TestHero:
     def test_get_hero_by_id_success_with_auth(self, client, mocker, test_data):
         mocker.patch(
             "flaskr.get_hero_by_id",
-            return_value={"status": "Success", "status_code": 200, "data": test_data[0]},
+            return_value={"status": "Success", "data": test_data[0]},
         )
-        mocker.patch("flaskr.auth", return_value={"status": "Success", "status_code": 200, "data": {}})
-        mocker.patch("flaskr.get_profile_by_id", return_value={"status": "Success", "status_code": 200, "data": {"key":"value"}})
+        mocker.patch("flaskr.auth", return_value=True)
+        mocker.patch("flaskr.get_profile_by_id", return_value={"key": "value"})
 
         response = client.get(
             "/heroes/1", headers={"Name": "hahow", "Password": "rocks"}
@@ -148,14 +148,16 @@ class TestHero:
     def test_get_hero_by_id_wrong_auth(self, client, mocker, test_data):
         mocker.patch(
             "flaskr.get_hero_by_id",
-            return_value={"status": "Success", "status_code": 200, "data": test_data[0]},
+            return_value={"status": "Success", "data": test_data},
         )
-        mocker.patch("flaskr.auth", return_value={"status": "Fail", "status_code": 401, "data": {}})
-        mocker.patch("flaskr.get_profile_by_id", return_value={"status": "Success", "status_code": 200, "data": {"key":"value"} })
+        mocker.patch("flaskr.auth", return_value=False)
+        mocker.patch("flaskr.get_profile_by_id", return_value={"key": "value"})
 
         response = client.get(
             "/heroes", headers={"Name": "hahow", "Password": "rockssss"}
         )
 
-        assert response.status_code == 401
-        assert response.data == b"Unauthorized client"
+        resp_json = json.loads(response.data)
+
+        assert response.status_code == 200
+        assert "profile" not in resp_json
