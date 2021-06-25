@@ -40,7 +40,8 @@ def test_data():
 class TestHeroesList:
     def test_get_heros_success_without_auth(self, client, mocker, test_data):
         mocker.patch(
-            "flaskr.get_heros", return_value={"status": "Success", "data": test_data}
+            "flaskr.get_heros",
+            return_value={"status": "Success", "status_code": 200, "data": test_data},
         )
 
         response = client.get("/heroes")
@@ -53,10 +54,21 @@ class TestHeroesList:
 
     def test_get_heros_success_with_auth(self, client, mocker, test_data):
         mocker.patch(
-            "flaskr.get_heros", return_value={"status": "Success", "data": test_data}
+            "flaskr.get_heros",
+            return_value={"status": "Success", "status_code": 200, "data": test_data},
         )
-        mocker.patch("flaskr.auth", return_value=True)
-        mocker.patch("flaskr.get_profile_by_id", return_value={"key": "value"})
+        mocker.patch(
+            "flaskr.auth",
+            return_value={"status": "Success", "status_code": 200, "data": {}},
+        )
+        mocker.patch(
+            "flaskr.get_profile_by_id",
+            return_value={
+                "status": "Success",
+                "status_code": 200,
+                "data": {"key": "value"},
+            },
+        )
 
         response = client.get("/heroes", headers={"Name": "hahow", "Password": "rocks"})
 
@@ -67,19 +79,28 @@ class TestHeroesList:
 
     def test_get_heros_wrong_auth(self, client, mocker, test_data):
         mocker.patch(
-            "flaskr.get_heros", return_value={"status": "Success", "data": test_data}
+            "flaskr.get_heros",
+            return_value={"status": "Success", "status_code": 200, "data": test_data},
         )
-        mocker.patch("flaskr.auth", return_value=False)
-        mocker.patch("flaskr.get_profile_by_id", return_value={"key": "value"})
+        mocker.patch(
+            "flaskr.auth",
+            return_value={"status": "Fail", "status_code": 401, "data": {}},
+        )
+        mocker.patch(
+            "flaskr.get_profile_by_id",
+            return_value={
+                "status": "Success",
+                "status_code": 200,
+                "data": {"key": "value"},
+            },
+        )
 
         response = client.get(
             "/heroes", headers={"Name": "hahow", "Password": "rockssss"}
         )
 
-        resp_json = json.loads(response.data)
+        assert response.status_code == 401
 
-        assert response.status_code == 200
-        assert all("profile" not in x for x in resp_json["heroes"])
 
 
 class TestHero:

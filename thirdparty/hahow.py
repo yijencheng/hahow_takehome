@@ -6,9 +6,9 @@ def get_heros():
     resp = requests.get(endpoint)
 
     if resp.status_code != 200:
-        return {"status": "Fail", "error_code": resp.status_code}
+        return {"status": "Fail", "status_code": resp.status_code}
 
-    return {"status": "Success", "data": resp.json()}
+    return {"status": "Success", "status_code": resp.status_code, "data": resp.json()}
 
 
 def get_hero_by_id(hero_id):
@@ -16,9 +16,9 @@ def get_hero_by_id(hero_id):
     resp = requests.get(endpoint)
 
     if resp.status_code != 200:
-        return {"status": "Fail", "error_code": resp.status_code}
+        return {"status": "Fail", "status_code": resp.status_code}
 
-    return {"status": "Success", "data": resp.json()}
+    return {"status": "Success", "status_code": resp.status_code, "data": resp.json()}
 
 
 def get_profile_by_id(hero_id):
@@ -26,14 +26,14 @@ def get_profile_by_id(hero_id):
     resp = requests.get(endpoint)
 
     if resp.status_code != 200:
-        return {"status": "Fail", "error_code": resp.status_code}
-    return {"status": "Success", "data": resp.json()}
+        return {"status": "Fail", "status_code": resp.status_code}
+    return {"status": "Success", "status_code": resp.status_code, "data": resp.json()}
 
 
-def auth(username, password):
+def auth(name, password):
     endpoint = "https://hahow-recruit.herokuapp.com/auth"
-    resp = requests.post(endpoint, json={"name": username, "password": password})
+    resp = requests.post(endpoint, json={"name": name, "password": password})
 
     if resp.status_code != 200:
-        return False
-    return True
+        return {"status": "Fail", "status_code": resp.status_code}
+    return {"status": "Success", "status_code": resp.status_code, "data": {}}
