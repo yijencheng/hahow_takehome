@@ -18,22 +18,29 @@ def test():
 
 class HeroList(Resource):
     def get(self):
+        authorized = False
+        name, password = request.headers.get("Name"), request.headers.get("Password")
+        if name and password:
+            auth_resp = auth(name, password)
+            if auth_resp["status"] != "Success":
+                return err_response(auth_resp["status_code"])
+            authorized = True
+
         resp = get_heros()
         if resp["status"] != "Success":
-            return err_response(resp["error_code"])
+            return err_response(resp["status_code"])
 
         data = {"heroes": resp["data"]}
-        name, password = request.headers.get("Name"), request.headers.get("Password")
-        if not name or not password:
-            return Response(
-                response=json.dumps(data),
-                status=200,
-                mimetype="application/json",
-            )
 
-        if auth(name, password):
+        # Get hero's profile if authorized
+        if authorized:
             for obj in data["heroes"]:
-                obj["profile"] = get_profile_by_id(obj["id"])
+                resp = get_profile_by_id(obj["id"])
+
+                if resp["status"] != "Success":
+                    return err_response(resp["status_code"])
+
+                obj["profile"] = resp["data"]
 
         return Response(
             response=json.dumps(data),
