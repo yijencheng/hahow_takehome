@@ -2,6 +2,7 @@ import json
 
 from flask import Flask, Response, request
 from flask_restful import Api, Resource
+from requests.exceptions import ReadTimeout
 
 from thirdparty.hahow import auth, get_hero_by_id, get_heros, get_profile_by_id
 
@@ -51,7 +52,7 @@ class HeroList(Resource):
                 status=200,
                 mimetype="application/json",
             )
-        except TimeoutError:
+        except ReadTimeout:
             return err_response(504)
         except Exception:
             return err_response(500)
@@ -83,7 +84,7 @@ class Hero(Resource):
                 data["profile"] = resp["data"]
 
             return Response(json.dumps(data), status=200, mimetype="application/json")
-        except TimeoutError:
+        except ReadTimeout:
             return err_response(504)
         except Exception:
             return err_response(500)
