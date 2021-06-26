@@ -8,6 +8,8 @@ def err_response(status_code: int) -> Response:
         return Response("Unauthorized client", status=401)
     elif status_code == 404:
         return Response("Not found", status=404)
+    elif status_code == 502:
+        return Response("Bad Gateway.Please retry later", status=502)
     elif status_code == 504:
         return Response("Gateway Timeout. Please retry later", status=504)
     else:
