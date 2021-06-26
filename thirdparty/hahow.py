@@ -1,7 +1,9 @@
 import requests
+from retrying import retry
+from .helper import retry_if_resp_502
 
 
-def get_heros(timeout=0.1):
+def get_heros(timeout=3):
     endpoint = "https://hahow-recruit.herokuapp.com/heroes"
     resp = requests.get(endpoint, timeout=timeout)
 
@@ -11,7 +13,8 @@ def get_heros(timeout=0.1):
     return {"status": "Success", "status_code": resp.status_code, "data": resp.json()}
 
 
-def get_hero_by_id(hero_id, timeout=5):
+@retry(stop_max_attempt_number=2, retry_on_result=retry_if_resp_502, wait_fixed=500)
+def get_hero_by_id(hero_id, timeout=3):
     endpoint = f"https://hahow-recruit.herokuapp.com/heroes/{hero_id}"
     resp = requests.get(endpoint, timeout=timeout)
 
@@ -27,7 +30,7 @@ def get_hero_by_id(hero_id, timeout=5):
     return {"status": "Success", "status_code": resp.status_code, "data": resp_json}
 
 
-def get_profile_by_id(hero_id, timeout=5):
+def get_profile_by_id(hero_id, timeout=3):
     endpoint = f"https://hahow-recruit.herokuapp.com/heroes/{hero_id}/profile"
     resp = requests.get(endpoint, timeout=timeout)
 
