@@ -1,9 +1,9 @@
 import requests
 
 
-def get_heros():
+def get_heros(timeout=0.1):
     endpoint = "https://hahow-recruit.herokuapp.com/heroes"
-    resp = requests.get(endpoint)
+    resp = requests.get(endpoint, timeout=timeout)
 
     if resp.status_code != 200:
         return {"status": "Fail", "status_code": resp.status_code}
@@ -11,28 +11,36 @@ def get_heros():
     return {"status": "Success", "status_code": resp.status_code, "data": resp.json()}
 
 
-def get_hero_by_id(hero_id):
+def get_hero_by_id(hero_id, timeout=5):
     endpoint = f"https://hahow-recruit.herokuapp.com/heroes/{hero_id}"
-    resp = requests.get(endpoint)
+    resp = requests.get(endpoint, timeout=timeout)
 
     if resp.status_code != 200:
         return {"status": "Fail", "status_code": resp.status_code}
 
-    return {"status": "Success", "status_code": resp.status_code, "data": resp.json()}
+    resp_json = resp.json()
+    if (
+        "id" not in resp_json
+    ):  # to handle Response 200 OK  {"code":1000,"message":"Backend error"}
+        return {"status": "Fail", "status_code": 502}
+
+    return {"status": "Success", "status_code": resp.status_code, "data": resp_json}
 
 
-def get_profile_by_id(hero_id):
+def get_profile_by_id(hero_id, timeout=5):
     endpoint = f"https://hahow-recruit.herokuapp.com/heroes/{hero_id}/profile"
-    resp = requests.get(endpoint)
+    resp = requests.get(endpoint, timeout=timeout)
 
     if resp.status_code != 200:
         return {"status": "Fail", "status_code": resp.status_code}
     return {"status": "Success", "status_code": resp.status_code, "data": resp.json()}
 
 
-def auth(name, password):
+def auth(name, password, timeout=2):
     endpoint = "https://hahow-recruit.herokuapp.com/auth"
-    resp = requests.post(endpoint, json={"name": name, "password": password})
+    resp = requests.post(
+        endpoint, json={"name": name, "password": password}, timeout=timeout
+    )
 
     if resp.status_code != 200:
         return {"status": "Fail", "status_code": resp.status_code}

@@ -158,4 +158,7 @@ class TestHero:
         )
 
         assert response.status_code == 401
-        assert response.data == b"Unauthorized client"
+        assert (
+            response.data
+            == b"Unauthorized client. Please check your name and password."
+        )
