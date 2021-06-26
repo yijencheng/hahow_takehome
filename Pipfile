@@ -10,7 +10,7 @@ flask-restful = "*"
 pytest = "*"
 pytest-mock = "*"
 flake8 = "*"
-black = "*"
+black = "==19.10b0"
 isort = "*"
 retrying = "*"
 
