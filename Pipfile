@@ -12,7 +12,6 @@ pytest-mock = "*"
 flake8 = "*"
 black = "*"
 isort = "*"
-retrying = "*"
 
 [requires]
 python_version = "3.8"
