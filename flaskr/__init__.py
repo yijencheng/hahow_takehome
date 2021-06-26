@@ -33,7 +33,7 @@ class HeroList(Resource):
 
             data = {"heroes": resp["data"]}
 
-            # Get hero's profile if authorized
+            # Get extra hero's profile if authorized
             if authorized:
                 for obj in data["heroes"]:
                     resp = get_profile_by_id(obj["id"])
@@ -71,6 +71,7 @@ class Hero(Resource):
 
             data = resp["data"]
 
+            # Get extra hero's profile if authorized
             if authorized:
                 resp = get_profile_by_id(hero_id)
                 if resp["status"] != "Success":
