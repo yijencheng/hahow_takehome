@@ -5,12 +5,14 @@
 ### Install requirements
 
 ```
+git clone {repo_url}
+
 pipenv install
 pipenv shell
 
 or 
 
-pip instll requirements.txt
+pip install requirements.txt
 ```
 ### 設定環境變數
 ```
@@ -56,4 +58,5 @@ flask run
 
 ## 其他
 ### 註解原則
-原則上，程式碼應該透過函式命名、標註回傳型態等方式，讓其他人一目瞭然，而避免用過多的註解去敘述功能。然而若是遇到有些狀況，例如為了handle某些特殊情況而加的`if-else`、或是因應功能需求產生的額外API call，可能就會需要加上comment，敘述這段程式碼做的事情以及原因。
+原則上，程式碼應該透過函式命名、標註回傳型態等方式，讓其他人一目瞭然，而避免用過多的註解去敘述功能。<br>
+然而若是遇到有些狀況，例如為了handle某些特殊情況而加的`if-else`、因應功能需求產生的額外API call、或是特別複雜的邏輯與演算法，就會需要加上comment，敘述這段程式碼做的事情以及原因。
