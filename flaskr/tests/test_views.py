@@ -40,7 +40,7 @@ def test_data():
 class TestHeroesList:
     def test_get_heros_success_without_auth(self, client, mocker, test_data):
         mocker.patch(
-            "flaskr.hero_views.get_heros",
+            "flaskr.views.hero_views.get_heros",
             return_value={"status": "Success", "status_code": 200, "data": test_data},
         )
 
@@ -54,15 +54,15 @@ class TestHeroesList:
 
     def test_get_heros_success_with_auth(self, client, mocker, test_data):
         mocker.patch(
-            "flaskr.hero_views.get_heros",
+            "flaskr.views.hero_views.get_heros",
             return_value={"status": "Success", "status_code": 200, "data": test_data},
         )
         mocker.patch(
-            "flaskr.hero_views.auth",
+            "flaskr.views.hero_views.auth",
             return_value={"status": "Success", "status_code": 200, "data": {}},
         )
         mocker.patch(
-            "flaskr.hero_views.get_profile_by_id",
+            "flaskr.views.hero_views.get_profile_by_id",
             return_value={
                 "status": "Success",
                 "status_code": 200,
@@ -79,15 +79,15 @@ class TestHeroesList:
 
     def test_get_heros_wrong_auth(self, client, mocker, test_data):
         mocker.patch(
-            "flaskr.hero_views.get_heros",
+            "flaskr.views.hero_views.get_heros",
             return_value={"status": "Success", "status_code": 200, "data": test_data},
         )
         mocker.patch(
-            "flaskr.hero_views.auth",
+            "flaskr.views.hero_views.auth",
             return_value={"status": "Fail", "status_code": 401, "data": {}},
         )
         mocker.patch(
-            "flaskr.hero_views.get_profile_by_id",
+            "flaskr.views.hero_views.get_profile_by_id",
             return_value={
                 "status": "Success",
                 "status_code": 200,
@@ -105,7 +105,7 @@ class TestHeroesList:
 class TestHero:
     def test_get_hero_by_id_success_without_auth(self, client, mocker, test_data):
         mocker.patch(
-            "flaskr.hero_views.get_hero_by_id",
+            "flaskr.views.hero_views.get_hero_by_id",
             return_value={
                 "status": "Success",
                 "status_code": 200,
@@ -123,7 +123,7 @@ class TestHero:
 
     def test_get_hero_by_id_not_found(self, client, mocker):
         mocker.patch(
-            "flaskr.hero_views.get_hero_by_id",
+            "flaskr.views.hero_views.get_hero_by_id",
             return_value={"status": "Fail", "status_code": 404, "data": {}},
         )
 
@@ -134,7 +134,7 @@ class TestHero:
 
     def test_get_hero_by_id_success_with_auth(self, client, mocker, test_data):
         mocker.patch(
-            "flaskr.hero_views.get_hero_by_id",
+            "flaskr.views.hero_views.get_hero_by_id",
             return_value={
                 "status": "Success",
                 "status_code": 200,
@@ -142,11 +142,11 @@ class TestHero:
             },
         )
         mocker.patch(
-            "flaskr.hero_views.auth",
+            "flaskr.views.hero_views.auth",
             return_value={"status": "Success", "status_code": 200, "data": {}},
         )
         mocker.patch(
-            "flaskr.hero_views.get_profile_by_id",
+            "flaskr.views.hero_views.get_profile_by_id",
             return_value={
                 "status": "Success",
                 "status_code": 200,
@@ -165,7 +165,7 @@ class TestHero:
 
     def test_get_hero_by_id_wrong_auth(self, client, mocker, test_data):
         mocker.patch(
-            "flaskr.hero_views.get_hero_by_id",
+            "flaskr.views.hero_views.get_hero_by_id",
             return_value={
                 "status": "Success",
                 "status_code": 200,
@@ -173,11 +173,11 @@ class TestHero:
             },
         )
         mocker.patch(
-            "flaskr.hero_views.auth",
+            "flaskr.views.hero_views.auth",
             return_value={"status": "Fail", "status_code": 401, "data": {}},
         )
         mocker.patch(
-            "flaskr.hero_views.get_profile_by_id",
+            "flaskr.views.hero_views.get_profile_by_id",
             return_value={
                 "status": "Success",
                 "status_code": 200,
