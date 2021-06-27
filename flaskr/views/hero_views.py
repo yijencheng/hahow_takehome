@@ -4,10 +4,10 @@ from flask import Blueprint, Response, request
 from flask_restful import Api, Resource
 from requests.exceptions import ReadTimeout
 
-from thirdparty.hahow import auth, get_hero_by_id, get_heros, get_profile_by_id
+from flaskr.thirdparty.hahow import auth, get_hero_by_id, get_heros, get_profile_by_id
 
-from .error_handler import err_response
-from .thread import ThreadRequests
+from flaskr.error_handler import err_response
+from flaskr.thread import ThreadRequests
 
 hero_app = Blueprint("hero_app", __name__)
 api = Api(hero_app)
