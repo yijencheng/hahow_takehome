@@ -2,7 +2,7 @@
 這是一個簡單的API server，提供`GET /heroes`和`GET /heroes/<hero_id>`兩個endpoint，會透過hahow提供的api獲取對應資料，並回傳給client。
 
 ## Get Started
-1. Install Requirements
+### Install requirements
 
 ```
 pipenv install
@@ -12,14 +12,17 @@ or
 
 pip instll requirements.txt
 ```
-2. 設定環境變數
+### 設定環境變數
 ```
 export FLASK_APP=flaskr
 ```
-3. 啟動local server
+### 啟動 local server
 ```
 flask run
 ```
+
+<br>
+<br>
 
 ## 專案架構
 
@@ -36,6 +39,9 @@ flask run
 這個專案大部分使用python或flask框架提供的library，如  [requests](https://github.com/psf/requests)
 , [flask-restful](https://github.com/flask-restful/flask-restful)、實現retry機制使用的[retrying](https://github.com/rholder/retrying)、以及程式碼品質分析(linting)的[isort](https://github.com/PyCQA/isort), [flake8](https://github.com/PyCQA/flake8) 和[black](https://github.com/psf/black)。
 
+<br>
+<br>
+
 
 ## 專案特色
 ### Retry 機制
@@ -47,3 +53,7 @@ flask run
 **解方**：針對authenticated的`/heros`做multithread的優化，成功提升速度兩倍以上。
 
 其他更多詳細內容與測試過程，可參考 [這份Google doc](https://docs.google.com/document/d/1nbh4kq1npun7aMx5vGXpVpnB1h1jlmDtj1qKLwgzzzs/edit?usp=sharing)
+
+## 其他
+### 註解原則
+原則上，程式碼應該透過函式命名、標註回傳型態等方式，讓其他人一目瞭然，而避免用過多的註解去敘述功能。然而若是遇到有些狀況，例如為了handle某些特殊情況而加的`if-else`、或是因應功能需求產生的額外API call，可能就會需要加上comment，敘述這段程式碼做的事情以及原因。
