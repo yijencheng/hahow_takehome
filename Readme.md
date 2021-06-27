@@ -22,7 +22,6 @@ flask run
 ```
 
 <br>
-<br>
 
 ## 專案架構
 
@@ -40,7 +39,6 @@ flask run
 , [flask-restful](https://github.com/flask-restful/flask-restful)、實現retry機制使用的[retrying](https://github.com/rholder/retrying)、以及程式碼品質分析(linting)的[isort](https://github.com/PyCQA/isort), [flake8](https://github.com/PyCQA/flake8) 和[black](https://github.com/psf/black)。
 
 <br>
-<br>
 
 
 ## 專案特色
@@ -53,6 +51,8 @@ flask run
 **解方**：針對authenticated的`/heros`做multithread的優化，成功提升速度兩倍以上。
 
 其他更多詳細內容與測試過程，可參考 [這份Google doc](https://docs.google.com/document/d/1nbh4kq1npun7aMx5vGXpVpnB1h1jlmDtj1qKLwgzzzs/edit?usp=sharing)
+
+<br>
 
 ## 其他
 ### 註解原則
